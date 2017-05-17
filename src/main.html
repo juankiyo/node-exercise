@@ -1,0 +1,39 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>		
+var ws = new WebSocket('ws://localhost:8282', 'echo-protocol');
+
+function sendMessage(){
+    var message = document.getElementById('message').value;
+	$.ajax({
+		url: 'http://localhost:8081/send/' + message,
+		type: 'POST',
+		success: function(result) {
+		}
+});
+}
+
+ws.addEventListener("message", function(e) {
+    var msg = e.data;
+    document.getElementById('messagesBox').innerHTML += '<br>' + msg;
+});
+
+</script>	
+</head>
+
+<body>
+
+<input id="message" type="text"/>
+<input type="button" value="Send" onclick="sendMessage();"/>
+<div id="messagesBox"></div>
+
+</body>
+
+
+
+
+
+
+
+</html>
