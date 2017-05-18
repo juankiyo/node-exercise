@@ -6,7 +6,7 @@ var queue = 'GIG';
 
 app.post('/send/:message', function (req, res) {
    var message = req.params.message;
-   sendMessage(message);
+   sendMessageToQueue(message);
 })
 
 var server = app.listen(8081, function () {
@@ -16,13 +16,12 @@ var server = app.listen(8081, function () {
 })
 
 amqp.connect('amqp://localhost', function(err, conn) {
-	channel = conn.createChannel(function(err, ch) {
-    
+	channel = conn.createChannel(function(err, ch) {    
     ch.assertQueue(queue, {durable: false});
   });
 });
 
-function sendMessage(message) {
+function sendMessageToQueue(message) {
 	if (channel != null) {		
 		channel.sendToQueue(queue, new Buffer(message.toString()));
 		console.log("Queue [%s] - Sending message %s", queue, message);
